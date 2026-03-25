@@ -1,57 +1,44 @@
+<!-- PROJECTS -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Jackson | Home</title>
-<link rel="stylesheet" href="style.css"/>
-<style>
-    #ascii-inline {
-      display: inline-block;
-      white-space: pre;
-      font-family: monospace;
-      font-size: 14px;
-      line-height: 1.2;
-      vertical-align: middle;
-    }
-</style>
+    <meta charset="UTF-8">
+    <title>Jackson | Projects</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+<header>
+    <h1>Projects</h1>
+    <nav>
+        <a href="../index.html">Home</a>
+        <a href="/blog/index.html">Blog</a>
+        <a href="#">GitHub</a>
+        <a href="/whoami/index.html">whoami</a>
+    </nav>
+</header>
+
 <div class="container">
-<h1>Jackson Lupia</h1>
-<div class="tagline">
-I am a <span class="purple" id="typed"></span><span class="cursor"></span>
+    <div class="projects-grid">
+        <div class="project-card">
+            <h2>Title</h2>
+            <p>Text</p>
+
+            <div class="project-links">
+                <a href="#">GitHub</a>
+                <a href="#">Write-up</a>
+            </div>
+        </div>
+
+<!-- PLACEHOLDER
+        <div class="project-card">
+            <div class="project-links">
+            </div>
+        </div> -->
+    </div>
 </div>
-<nav>
-<a href="/blog/index.html">Blog</a>
-<a href="#">Projects</a>
-<a href="#">GitHub</a>
-<a href="#">whoami</a>
 
-</nav>
-<pre id="ascii-display"></pre>
-</div>
+<footer>Γ</footer>
 
-<script src="/ascii.js"></script>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-    const words = ["Web Security Analyst ", "Web Application Penetration Tester ", "Cyber Security Student "];
-    let i = 0, j = 0, currentWord = "", isDeleting = false;
-    const typedEl = document.getElementById("typed");
-
-    function type() {
-        currentWord = words[i];
-        if (isDeleting) typedEl.textContent = currentWord.substring(0, j--);
-        else typedEl.textContent = currentWord.substring(0, j++);
-        if (!isDeleting && j === currentWord.length) { isDeleting = true; setTimeout(type, 1500); return; }
-        if (isDeleting && j === 0) { isDeleting = false; i = (i + 1) % words.length; }
-        setTimeout(type, isDeleting ? 50 : 150);
-    }
-    type();
-
-    // ASCII Morph
-    var element = document.getElementById('ascii-display');
-    AsciiMorph(element, { x: 45, y: 15 });
-});
-</script>
 </body>
 </html>

@@ -1,3 +1,4 @@
+<!-- BLOG -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +9,7 @@
 <body>
 
 <header>
-    <h1>Jackson's Write-ups</h1>
+    <h1>Write-ups</h1>
     <nav>
         <a href="../index.html">Home</a>
         <a href="/projects/index.html">Projects</a>
@@ -31,7 +32,8 @@
                 Myself and a team member named Andrew, who also has experience in the web field, decided to work together on the web application section of NCL.
 
                 As Andrew and I flyed past the first two challenges we encounterd the final third challenge. At this point Andrew was appointed to another section of NCL and I was left to solve the final challenge on my own.
-                The challenge was named: 'The Cucumber's Secret' with five sub-questions.
+                The challenge was named: 'The Cucumber's Secret' with five sub-questions. Due to NCL/CyberSkylines policy, I am unable to provide both questions and answers to this challenege. 
+                This is a simple write-up of my findings for this challenge.
             </p>
             <h1>Γ-Overview</h1>
             <p>
@@ -78,8 +80,8 @@ from datetime import datetime, timezone
 
 class ArchiveMeta:
     def __init__(self):
-        self.url = "http://archive" 
-        self.title = "The Cucumber's Secret"
+        self.url = 'http://archive' 
+        self.title = 'The Cucumber's Secret
         self.timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
         self.status_code = 200
         self.char_count = 615
@@ -96,43 +98,83 @@ class ArchiveMeta:
 
             <h1>Γ-Solution</h1>
             <p>
-                Text.
+                After an hour or two of reserach and collaboration with my team, I was able to craft a working RCE Python Pickle Object creator. Following the script formed above, I added a couple of areas to satisfify the websites requirements. 
+                The first thing I added was a '__reduce__' method. The reduce double underscore (dunder) method is a special method in Python that is used to define object serializations. In this instance, I used it to craft a malfored reqeust and execute code on demand.
+            <pre><code>
+import pickle
+import base64
+from datetime import datetime, timezone
+
+class MaintenanceMode:
+    def __reduce__(self):
+        self.execute_task = 'cd ../.env'
+
+class ArchiveMeta:
+    def __init__(self):
+        self.url = 'http://archive'
+        self.title = 'The Cucumber's Secret'
+        self.timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        self.status_code = 200
+        self.char_count = 615
+
+obj = ArchiveMeta()
+pickle_obj = pickle.dumps(obj)
+pickle_obj = pickle_obj.replace(b'__main__', b'app.main')
+malformed_payload = base64.b64encode(pickle_obj).decode()
+print(malformed_payload)
+            </code></pre>
+                Now that we are here it is important to go over an annoying aspect in this CTF. The CTF was very picky on which commands could be executed through the RCE vulnerability. I had to do a lot of trial and error to find a command that would work.     
+                After a while, I was able to determine that change directory (cd) command was the only command to seem to run. I'm sure the CTF was crafted to only accept very few commands so that people don't accidentally go too far and cause potential damage.
+                After further trial and error with their directory structure, I was able to find the '.env' file. This file is a rather common file in web applications and I have done a CTF in the past that involved reading the contents of an '.env' file using RCE.
+                The malfored Python Pickle script successfully answered all five questions that were asked at the beginning of the CTF. Unfortunately, NCL or CyberSkyline, has a strict policy where I can not give out any specific details about the answers. 
+                Since this is a simple write up of a previous challenege, this falls into their policy about sharing experiences in their labs. 
             </p>
-            <pre><code>nmap -sV -p 1-65535 192.168.1.10</code></pre>
 
             <h1>Γ-Findings</h1>
             <p>
-                Text.
+                Though I am unable to share the answers, I can provide insight of my discoverings throughout this challenge. For one, this is the first time I've heard and used a Pickle Object before.
+                This lab made me research and truely dig deep into how Pickle objects work and their vulnerabilities. This also includes finding my own exploits for this challenge that aren't related to any of the questions/objective.
+                Throughout this challenge, trying to make a working RCE, I managed to find a working XSS exploit within the Pickle Object reader.
+            <div class="code-container">
+                <pre><code>
+class ArchiveMeta:
+    def __init__(self):
+        self.url = 'http://archive' 
+        self.title = '&lt;h1&gt;XSS&lt;/h1&gt;'
+        self.status_code = 200
+        self.char_count = 615
+                </code></pre>
+
+                <pre><code>
+                    OUTPUT:
+
+        {
+            'url': 'http://archive',
+            'title': '<h1>XSS</h1>',
+            'timestamp': '2025-11-17T17:30:10Z',
+            'status_code': 200,
+            'char_count': 615
+        }
+                </code></pre>
+            </div>
+                After discussions with NCL/CyberSkyline staff, I was informed that the XSS vulnerability that I found was not apart of the challenege and was unintentional. Now, I don't know how common this happens but I was able to pat myself on back for finding out this cool easter egg. 
+                In the example I used the 'h1' tag but replacing the self.title with any JavaScript readable code would work, including fetch, alert, etc...  
             </p>
             <h1>Γ-Lessons Learned</h1>
             <p>
-                Text.
+                Concluding this challenge, I had a great time and I learned so much. At first I was hesitant to begin this lab without a team and tackle it solo but I was amazed on how well I performed. 
+                I was able to solve the challenege and answer all of the questions and it would awarded us about 65 points in total. Additioanlly, I was very euphoric when I managed to figure out an unintentional and it made me realize that everything that I have learned is being appilied. 
+                This was my first time doing the NCL/CyberSkyline events and I had a blast. Stay tuned for next semester because Andrew and I will be tackling the web application section for the Spring of 2026 NCL.
+                <br>
+                <br>
+                <img src="https://i.pinimg.com/originals/12/30/db/1230db02e1e2bbc78d3b3db6b0a2469b.gif" alt="Dancing GIF" width="50" height="50">
             </p>
         </details>
     </article>
 
-    <article>
-        <details>
-            <summary>
-                    <h2>Radio Frequency FPV Drone Radar (PROJECT)</h2>
-                    <div class="date">March 7, 2026</div>
-            </summary>
-                <p>Red team exercises simulate real-world attacks on an organization to test the effectiveness of its defenses. These simulations help identify gaps in security before real attackers can exploit them.</p>
-                <pre><code>Metasploit > use exploit/windows/smb/ms17_010_eternalblue</code></pre>
-        </details>
-    </article>
-
-    <article>
-        <details>
-            <summary>
-                <h2>Threat Intelligence Collection</h2>
-                <div class="date">March 6, 2026</div>
-            </summary>
-
-            <p>Collecting threat intelligence involves gathering data about cyber threats, malware, and attacker tactics. It helps organizations proactively defend against attacks by understanding the threat landscape.</p>
-            <pre><code>curl -s https://threatintel.example.com/feed | grep malware</code></pre>
-        </details>
-    </article>
+    <!-- <article>
+        INSERT ARTICLE HERE (follow structures above)
+    </article> -->
 
 </div>
 

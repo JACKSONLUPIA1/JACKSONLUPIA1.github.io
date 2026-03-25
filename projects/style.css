@@ -1,0 +1,145 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Courier New", monospace;
+    background-color: #0b0c10;
+    color: #f85df5;
+    line-height: 1.6;
+
+    display: block; /* ✅ force normal layout */
+}
+
+header {
+    background-color: #1f2833;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 2px solid #f85df5;
+}
+
+header h1 {
+    color: #f85df5;
+    font-size: 2.5em;
+}
+
+nav {
+    margin-top: 10px;
+}
+
+nav a {
+    color: #f85df5;
+    text-decoration: none;
+    margin: 0 10px;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: #66fcf1;
+}
+
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+article {
+    background-color: #1f2833;
+    padding: 20px;
+    margin-bottom: 30px;
+    border-left: 5px solid #f85df5;
+    border-radius: 4px;
+    color: #c5c6c7;
+}
+
+article h1 {
+    font-size: 25px;
+    font-style: bold;
+    color: #aba6ab;
+}
+
+article h2 {
+    color: #f85df5;
+}
+
+article .date {
+    font-size: 0.9em;
+    color: #c5c6c7;
+    margin-bottom: 10px;
+}
+
+article p {
+    margin-bottom: 10px;
+}
+
+code, pre {
+    background-color: #0b0c10;
+    color: #c5c6c7;
+    padding: 5px;
+    border-radius: 3px;
+    display: block;
+    overflow-x: auto;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    color: #f85df5;
+    border-top: 2px solid #f85df5;
+    margin-top: 50px;
+}
+summary {
+    list-style: none;
+    cursor: pointer;
+}
+
+summary::-webkit-details-marker {
+    display: none;
+}
+
+.code-container {
+    display: flex;
+    gap: 10px; /* space between blocks */
+}
+
+.code-container pre {
+    flex: 1; 
+    overflow-x: auto; 
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+.project-card {
+    background-color: #1f2833;
+    padding: 20px;
+    border-radius: 6px;
+    border: 1px solid #2c3440;
+    transition: transform 0.2s ease, border 0.2s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    border: 1px solid #f85df5;
+}
+
+.project-card h2 {
+    color: #f85df5;
+    margin-bottom: 10px;
+}
+
+.project-card p {
+    color: #c5c6c7;
+    font-size: 0.95em;
+}
+
+.project-links {
+    margin-top: 15px;
+}
+
+.project-links a {
+    margin-right: 10px;
+    font-size: 0.9em;
+}

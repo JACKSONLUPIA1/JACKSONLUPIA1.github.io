@@ -25,16 +25,104 @@
                 <div class="date">May 2025 - Present</div>
             </summary>
             <h1>Γ-Intro</h1>
-            <p>Text</p>
-
-            <h1>Γ-Usage</h1>
-            <p>Text</p>
-
+            <p>Beginning of the summer of 2025 I began to work on an individual web-application project. At first, this project was for me to understand the back-end behind a couple of important web application aspects.
+            When I first began to develop the website I made it a working basic CTF challenege with a couple of known vulnerabilities. This includes path traversal, SQL injection, cookie manipulaition and a number used once (nonce) validation. 
+            After about two weeks I managed to create a working CTF web application challenege that was fairly easy. After finishing the vulnerable section of the project, I lightblub went off in my head.
+            I decided to flip the vulnerable script of the website and make it secure. This is where the AAA Zero-Trust Web Server project was emerged. I centered my focus on a well-known cybersecurity concepts of Authentication, Authorization and Accounting (AAA) and the Zero-Trust security model.
+            This opened my eyes to the world of web application security as this is the first time I worked on web application security by myself.
+            Still in development, I have halted my resources and concentration of the project once I hit a comfortable stopping point. As of March of 2026, this is my official write-up for my AAA Zero-Trust Web Server project.
+            <br>
+            <br>
+            <img src="https://media.tenor.com/KshIPrRS1aAAAAAM/cat-orange-cat.gif" alt="kat" width="50" height="50">
+            </p>
             <h1>Γ-Development</h1>
-            <p>Text</p>
+            <p>As stated above in the 'Intro' section, this project had a couple of pivots. I found it fairly easy to make a vulnerable website and wanted more of challenge once I completed it. There's no better way to challenge yourself by securing a website as much as you can.
+                Following the AAA and Zero-Trust security models, I implemented a couple of security measures to make the website as secure as possible. This includes a custom authentication system, a role-based access control (RBAC) authorization system and an accounting system that logs all user activity on the website.
+                I split up the A's into three different development categories.
+                <br>
+                <br>
+                Authentication - Node.js/JWT
+                <br>
+                Authorization - MySQL/Database
+                <br>
+                Accounting - External Python API/MySQL
+                <br>
+                Confidentiality (Bonus) - Certificates/HTTPS/SSL/TLS/API Encryption/.ENV
+                <br>
+                Zero-trust - RBAC/Least Privilege/Separation of Concerns (SoC)
+                <br>
+                <br>
+                Authentication is handled through JavaScript, specifically Node.js and JSON Web Tokens (JWT). JWT was center of the authentication and has the most security measures surronding it. For instance, everytime a user makes a request to the external API, either unintentional or intentional, the JWT is validated and checked for any signs of tampering.
+                <div class="code-container">
+                    <pre><code>
+
+
+
+        eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+        eyJuYW1lIjoiMjFhIiwibG9nZ2VkSW4iOjEs
+        ImFkbWluIjoxLCJpYXQiOjE3NzQ1NDI5ODl9
+        ZjCnD-cz_sxxdzBtB0yEAkM9R1HzLSuyBx9EXQXPpUM
+                    </code></pre>
+
+                    <pre><code>
+                    OUTPUT:
+
+            {
+                "alg": "HS256",
+                "typ": "JWT"
+            }
+
+            {
+                "name": "21a",
+                "loggedIn": 1,
+                "admin": 1,
+                "iat": 1774542989
+            }
+                </code></pre>
+            </div>
+            The left-hand side of the code container is an example of what a JWT token looks like in my web environment.
+            The right-hand side of the code contains the decoded/decrypted value of the generated token. It's important to note the different values/variables the token contains.
+            On the outside, it may seem like the three main variables, name, loggedIn, and admin, are fairly basic and gives the attacker more of a vector to work with.
+            I completely agree with you if you think this. The reason why these aren't named anything else or aren't encrypted is because of the fact of my lazieness.
+            With the working authentication system, I could easily encrypt or even change the value of the names or indentifiers, I am just too lazy to do so. 
+            My laziness surronding this potential issue is insured by how JWT works. 
+            JWT is a stateless authentication system, meaning there is no need for storing values in a database. This allows for real-time changes to be done to the token without the need for a query or an asynchronous request.
+            An important aspect of JWT is the fact that each token is signed with a secret key. This secret key basically verifies the integrity of the token and ensures that it hasn't been tampered with.
+            JWT is fairly easily to tamper with if the token is not requried or the key is rather weak. However, I like to believe I implemented a fairly strong key that is stored in the environment variables (.env) of the server.
+            My key is programmed to be a fixed-length hash that is randomly generated. This value actually changes every week through an automation system using the Python API and Python's time packages. 
+            This means that if the key were to be leaked, it would eventually be changed. With the secret key being changed every week, this means that every logged in user would need to sign-back in. This is a minor inconvenience and if this website were to be a for a purpose, I probably wouldn't implement a system like this.
+            One last note before moving on from the JWT section is that I have three secret keys that are signed depending on the 'severity' of the account. For example, an admin account would be tagged with a secret key different from the others that authorizes for the use of admin API calls. This does come with a security check as well.
+            Every single call/change that is made where a JWT token is signed with an admin key is HEAVILY monitored and logged. This log consists of the username, IP address (WiFi/RJ-45 dependent), action performed, time of creation, time of logged in user,  This ties into the accounting section of AAA.
+            <br>
+            Moving away from the authentication part of the website, it's time to cover the authorization section.
+            For the authorization, I decided to go withl a Rule-based access control (RuBAC) system that is fairly simple. The RuBAC system is straight-forward and piggy backs direcetly off the JWT.
+            Whenever a user logins in successfully a JWT token is assigned to them. The token contains the previously stated values above. These values are fetched directly from the MySQL database that hosts the users and permissions for the website.
+            After a token is assigned, the webserver processes the values of the token and retireves the permissions for the user. 
+            Since there is only two-real values, there is only two 'rules,' admin and logged-in. The admin rule allows for the user to access the admin panel as well as make external API calls. The logged-in rule allows for the user simply interact with the website. The default website is a simple socket-based website where users can chat with each other.
+            This is really all there is to talk about this section. I can also bring-up that a confidentiality concern with my database calls. 
+            The website is hosted locally on my computer through the use of Node.js, Express, MySQL, and many other reliants. This means that every-single back-end componet is hosted on my local machine and requires the system to be up and running to 100% access. 
+            At this point I had a working certificate to encrypt the traffic between the client and the server using TLS/SSL. The certificate wasn't anything special and was self-signed but that's not the point.
+            The point is that as I was working on the server with a packet-sniffer in the background, I noticed that the traffic relating to the SQL calls were all unencrypted and in the clear. This means that all of the hidden SQL calls are in the clear and anyone visiting the website with a packet-sniffer could view the query commands and database responses.
+            To fix this issue, I self-signed another certificate which implemented a secure connection between the database and the client. After HOURS of learning and trying to get it to encrypt the traffic, it finally worked.
+            Like I said at the beginning, the authorization section is fairly simple and straight-forward with no extreme secrets behind the logic.
+            <br>
+            <br>
+            Flipping the book to the next page introduces us to the accounting section. In my opinion, the accounting section is one of the most important and enjoyable process of this project.
+            For the accounting section, I decided to use my external Python API to its fullest and allocating the servers commands and processes away from Node.js/Express and to an external API. 
+            When creating the API I decide to go with Python's FastAPI library as it is fairly easy to use and worked flawless with my half-built infrastructure. This external API is completely hidden from the user and deals with EVERYTHING encryption/confidentiality related. Changing a users password? Python API. Changing a rule of a specific user? Python API. Wanna view all the messages a user sent? Python API. You get the point.
+            The Python API is the heart of the account system and is meant to be externally hosted, in-order to hide the request away from the central server. In my development cycle, this was actually never achieved due to a couple of reasons.
+            The first reason is that the Python API is hosted on the local machine along side with the database and webserver. I could of theoretically paid for a DNS domain but if I could do it for free through local hosting, I will do that, as this is just a project. 
+            The second reason is that the Python API is desinged to NEVER be seen by the user. This means that the only API calls that are visible are if you have access to any admin commands. Even though the API makes calls/request all the time to every user, only a user with the admin rule can see the API calls and responses via the Network tab in the development section of a browser. 
+            This process took a couple of work and a lot of trial and error to get it working. For one, an API call could be viewed by everyone for a split second if you were to study the Network tab when logging in successfully. To get around this issue, I decided to store the IAT logged-in time in the JWT and later process it in the database later. This causes the database to run a tad-bit slower but it is worth it in my opinion because the API is now fully hidden.
+            Additionally, API calls are heavily monitored and logged, requiring EVERY SINGLE API action to be checked for the JWT token with the admin key. It also checks for the Socket Session Identification (SSID) value but this method was implemented later throughout its development cycle.
+
+            </p>
 
             <h1>Γ-Showcase</h1>
             <p>Text</p>
+
+            <h1>Γ-Usage</h1>
+            <p></p>
 
             <h1>Γ-Lessons Learned</h1>
             <p>Text</p>
